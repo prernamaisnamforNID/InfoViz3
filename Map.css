@@ -1,0 +1,259 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: #0a0a0d;
+  font-family: -apple-system, "Segoe UI", sans-serif;
+  overflow: hidden;
+}
+
+#viz {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+#map-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.country {
+  fill: #1c1c24;
+  stroke: #2e2e38;
+  stroke-width: 0.5;
+}
+
+.country-label {
+  fill: #6c6c78;
+  font-size: 8px;
+  font-family: -apple-system, "Segoe UI", sans-serif;
+  text-anchor: middle;
+  pointer-events: none; /* labels never block hover/tooltip on the country beneath them */
+  user-select: none;
+}
+
+.state-border {
+  fill: none;
+  stroke: #ffffff;
+  stroke-opacity: 0.55;
+  pointer-events: none; /* hit-testing is done via geoContains on mousemove instead, not element hover */
+}
+
+#state-tooltip {
+  position: fixed;
+  z-index: 10;
+  background: #1c1c24;
+  border: 1px solid #33333d;
+  color: #eaeaea;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.08s;
+  white-space: nowrap;
+}
+
+.meteorite {
+  fill-opacity: 0.7;
+  stroke: none;
+  /* fill color is set per-dot in script.js (colorForFall),
+     based on Fell vs Found — intentionally not hardcoded here */
+}
+
+/* --- count overlay, top right --- */
+#count-overlay {
+  position: absolute;
+  top: 32px;
+  right: 40px;
+  text-align: right;
+  color: #eaeaea;
+  pointer-events: none;
+}
+
+#count-label {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9a9aa5;
+  margin-bottom: 4px;
+}
+
+#count-value {
+  font-size: 48px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- legend, top right, below the count --- */
+#legend {
+  position: absolute;
+  top: 130px;
+  right: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.15s;
+  user-select: none;
+}
+
+/* clicked off — dimmed to show it's filtered out, not deleted */
+.legend-item:not(.active) {
+  opacity: 0.3;
+}
+
+.legend-item:hover {
+  opacity: 0.75;
+}
+
+.legend-item:not(.active):hover {
+  opacity: 0.5;
+}
+
+.legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.swatch-found {
+  background: #B4FF82;
+}
+
+.swatch-fell {
+  background: #FF4885;
+}
+
+.legend-label {
+  font-size: 13px;
+  color: #eaeaea;
+}
+
+#legend-all {
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  margin-bottom: 2px;
+}
+
+#legend-all .legend-label {
+  font-size: 12px;
+  color: #9a9aa5;
+}
+
+/* --- slider overlay, bottom --- */
+#slider-overlay {
+  position: absolute;
+  bottom: 50px;
+  left: 40px;
+  right: 40px;
+  height: 56px;
+}
+
+/* the tick axis sits behind the invisible range input,
+   at the exact same horizontal span, so tick positions
+   (in %) line up with where the thumb actually sits */
+#ticks-track {
+  position: absolute;
+  top: 0;
+  left: 8px;
+  right: 8px;
+  height: 36px;
+}
+
+.tick {
+  position: absolute;
+  bottom: 20px;
+  width: 1px;
+  background: #55555f;
+  transform: translateX(-50%);
+}
+
+.tick-minor {
+  height: 8px;
+}
+
+.tick-major {
+  height: 16px;
+  width: 2px;
+  background: #cfcfd6;
+}
+
+.tick-label {
+  position: absolute;
+  bottom: 0;
+  transform: translateX(-50%);
+  font-size: 13px;
+  color: #9a9aa5;
+  white-space: nowrap;
+}
+
+/* the native range input becomes an invisible drag/keyboard
+   surface — its own track and default thumb are hidden,
+   we only render our own thumb marker */
+#year-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 36px;
+  background: transparent;
+  margin: 0;
+  cursor: pointer;
+}
+
+#year-slider::-webkit-slider-runnable-track {
+  background: transparent;
+  height: 36px;
+}
+
+#year-slider::-moz-range-track {
+  background: transparent;
+  height: 36px;
+}
+
+#year-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 3px;
+  height: 26px;
+  border-radius: 2px;
+  background: #ff8a5c;
+  cursor: pointer;
+  margin-top: 5px;
+  box-shadow: 0 0 0 5px rgba(255, 138, 92, 0.18);
+}
+
+#year-slider::-moz-range-thumb {
+  width: 3px;
+  height: 26px;
+  border-radius: 2px;
+  background: #ff8a5c;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 0 5px rgba(255, 138, 92, 0.18);
+}
+
+#year-slider:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 5px rgba(255, 138, 92, 0.35);
+}

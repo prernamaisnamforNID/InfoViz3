@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meteorite Landings — Interactive Map</title>
+
+<!-- D3 and TopoJSON, loaded from CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+
+<!-- our own stylesheet -->
+<link rel="stylesheet" href="Map.css">
+</head>
+<body>
+
+<div id="viz">
+  <svg id="map-svg"></svg>
+
+  <div id="count-overlay">
+    <div id="count-label">Meteorite Count</div>
+    <div id="count-value">0</div>
+  </div>
+
+  <div id="legend">
+    <div class="legend-item active" data-fall="all" id="legend-all">
+      <span class="legend-label">View All</span>
+    </div>
+    <div class="legend-item active" data-fall="Found">
+      <span class="legend-swatch swatch-found"></span>
+      <span class="legend-label">Found</span>
+    </div>
+    <div class="legend-item active" data-fall="Fell">
+      <span class="legend-swatch swatch-fell"></span>
+      <span class="legend-label">Fell</span>
+    </div>
+  </div>
+
+  <div id="state-tooltip"></div>
+
+  <div id="slider-overlay">
+    <div id="ticks-track"></div>
+    <input type="range" id="year-slider" min="1890" max="2020" value="1890" step="10"
+           aria-label="Select decade">
+  </div>
+</div>
+
+<!-- our own script, loaded last so the DOM above already exists -->
+<script src="Map.js"></script>
+</body>
+</html>

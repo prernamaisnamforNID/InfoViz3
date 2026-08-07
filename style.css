@@ -1,0 +1,64 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: #05050a;
+  overflow: hidden;
+  font-family: -apple-system, "Segoe UI", sans-serif;
+}
+
+#frame1 {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+#space-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* --- centered landing content, sits above the floating dots --- */
+#landing-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #eaeaea;
+}
+
+#landing-title {
+  font-size: 28px;
+  font-weight: 500;
+  margin: 0 0 28px;
+  letter-spacing: -0.01em;
+}
+
+#explore-btn {
+  display: inline-block;
+  padding: 10px 28px;
+  border: 1px solid #5a5a66;
+  border-radius: 999px;
+  color: #eaeaea;
+  text-decoration: none;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+#explore-btn:hover {
+  background: #ff8a5c;
+  border-color: #ff8a5c;
+  color: #05050a;
+}
